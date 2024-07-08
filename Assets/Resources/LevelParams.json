@@ -1,0 +1,28 @@
+{
+    "Levels": [
+        {
+            "Name": "Level1",
+            "ID": 1,
+            "SpreadRadius": 250,
+            "Time": 20,
+            "CoinsAmount": 500,
+            "Target": 1
+        },
+        {
+            "Name": "Level2",
+            "ID": 2,
+            "SpreadRadius": 250,
+            "Time": 90,
+            "CoinsAmount": 300,
+            "Target": 1
+        },
+        {
+            "Name": "Level3",
+            "ID": 3,
+            "SpreadRadius": 250,
+            "Time": 120,
+            "CoinsAmount": 300,
+            "Target": 2
+        }
+    ]
+}
