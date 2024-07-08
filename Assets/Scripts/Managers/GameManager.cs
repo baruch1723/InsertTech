@@ -38,9 +38,9 @@ namespace Managers
             CurrentState = newState;
             // Handle state transitions
         }
-        public void SwitchScene(string scene,int level = 1, int delayTime = 0)
+        public void SwitchScene(string scene,int level = 1)
         {
-            StartCoroutine(LoadScene(scene,level,delayTime));
+            StartCoroutine(LoadScene(scene,level));
         }
 
         private void LoadLevel(int level)
@@ -65,10 +65,8 @@ namespace Managers
             return null;
         }
 
-        private IEnumerator LoadScene(string scene,int level,int delayTime = 0)
+        private IEnumerator LoadScene(string scene,int level)
         {
-            yield return new WaitForSecondsRealtime (delayTime);
-
             var asyncLoad = SceneManager.LoadSceneAsync(scene);
             
             while (!asyncLoad.isDone)

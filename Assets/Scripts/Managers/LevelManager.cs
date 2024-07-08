@@ -12,29 +12,29 @@ namespace Managers
         public static LevelManager instance;
 
         public GameObject PlayerPrefab;
+        public GameObject coinPrefab;
+        private GameObject _player;
 
         public int _currentLevel;
-        
         public int target;
         public float timeRemaining = 60f;
-
+        public float spawnRadius = 50f;
+        
         public int collectedCoins = 0;
         public bool timerIsRunning;
-        private GameObject _player;
+
         public LayerMask groundLayer;
         public LayerMask obstacleLayer;
-        public float spawnRadius = 50f;
-        public int maxAttempts = 100;
-        public Terrain terrain;
-    
         
+        public int maxAttempts = 100;
+
         public static event Action<int> OnCoinCollected;
         public static event Action<int> OnLevelChanged;
         public static event Action<float> OnTimeUpdated;
         public static event Action OnGameLoose;
         public static event Action OnGameWin;
 
-        public GameObject coinPrefab;
+        
         private void Awake()
         {
             if (instance == null)
@@ -86,7 +86,6 @@ namespace Managers
             {
                 timeRemaining -= Time.deltaTime;
                 OnTimeUpdated?.Invoke(timeRemaining);
-                //HUDController.instance.UpdateTimerText(timeRemaining);
             }
             else
             {
@@ -130,7 +129,7 @@ namespace Managers
             GameManager.instance.SwitchScene("Game",_currentLevel);
         }
 
-        public void DistributeCoins(int amount, int radius)
+        private void DistributeCoins(int amount, int radius)
         {
             spawnRadius = radius;
             var parent = new GameObject("Coins")
@@ -141,11 +140,11 @@ namespace Managers
                 }
             };
             
-            terrain = FindObjectOfType<Terrain>();
-        
+            var terrain = FindObjectOfType<Terrain>();
+            
             for (int i = 0; i < amount; i++)
             {
-                var spawnPosition = GetValidSpawnPosition();
+                var spawnPosition = GetValidSpawnPosition(terrain);
                 if (spawnPosition == Vector3.zero) continue;
             
                 var coin = CoinFactory.CreateCoin(coinPrefab, parent.transform);
@@ -154,7 +153,7 @@ namespace Managers
             }
         }
 
-        private Vector3 GetValidSpawnPosition()
+        private Vector3 GetValidSpawnPosition(Terrain terrain)
         {
             for (int i = 0; i < maxAttempts; i++)
             {
