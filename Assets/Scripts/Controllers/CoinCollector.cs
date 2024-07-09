@@ -5,13 +5,12 @@ namespace Controllers
 {
     public class CoinCollector : MonoBehaviour
     {
-        void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Coin"))
-            {
-                LevelManager.instance.CollectCoin();
-                Destroy(other.gameObject);
-            }
+            if (!other.CompareTag("Coin")) return;
+            
+            LevelManager.instance.CollectCoin();
+            Destroy(other.gameObject);
         }
     }
 }

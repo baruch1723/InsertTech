@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using Constants;
 using Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,45 +13,67 @@ namespace Managers
      
         public enum GameState { Start, Playing, Paused, GameOver }
 
+        private GameState CurrentState { get; set; }
         
         private LevelsWrapper loadedLevels;
         private int _availableLevels;
+        
+        private const string CurrentLevel = "CurrentLevel";
+        
         public int GetAvailableLevels => _availableLevels;
-        public GameState CurrentState { get; private set; }
 
         private void Awake()
         {
             if (instance == null)
             {
                 instance = this;
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
                 Destroy(gameObject);
             }
             
-            loadedLevels = LoadLevels();
+            loadedLevels = LoadLevelsFromJson();
+            if (loadedLevels == null)
+            {
+                Debug.LogError("Levels not found");
+                return;
+            }
+            
             _availableLevels = loadedLevels.Levels.Count;
+            ChangeState(GameState.Start);
+        }
+
+        public static int GetCurrentLevel()
+        {
+            var currentLevel = PlayerPrefs.GetInt(CurrentLevel, 1);
+            return currentLevel;
+        }
+
+        private static void SaveCurrentLevel(int level)
+        {
+            PlayerPrefs.SetInt(CurrentLevel, level);
         }
         
         public void ChangeState(GameState newState)
         {
             CurrentState = newState;
-            // Handle state transitions
         }
+        
         public void SwitchScene(string scene,int level = 1)
         {
             StartCoroutine(LoadScene(scene,level));
         }
 
-        private void LoadLevel(int level)
+        private void LoadLevel(int levelNumber)
         {
-            var l = loadedLevels.Levels.FirstOrDefault(a => a.ID.Equals(level));
-            PlayerPrefs.SetInt("CurrentLevel", l.ID);
-            LevelManager.instance.StartLevel(l);
+            var level = loadedLevels.Levels.FirstOrDefault(a => a.ID.Equals(levelNumber));
+            SaveCurrentLevel(levelNumber);
+            LevelManager.instance.StartLevel(level);
         }
 
-        private static LevelsWrapper LoadLevels()
+        private static LevelsWrapper LoadLevelsFromJson()
         {
             var  jsonFile = Resources.Load<TextAsset>("LevelParams");
 
@@ -74,10 +97,15 @@ namespace Managers
                 yield return null;
             }
             
-            if (!string.Equals("MainScene", scene))
+            if (!string.Equals(Scenes.MenuScene, scene))
             {
                 LoadLevel(level);
             }
+        }
+
+        public void RestartLevel()
+        {
+            SwitchScene(Scenes.GameLevel,GetCurrentLevel());
         }
     }
 }

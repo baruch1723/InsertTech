@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Constants;
 using Controllers;
 using Models;
 using UnityEngine;
@@ -11,36 +12,36 @@ namespace Managers
     {
         public static LevelManager instance;
 
-        public GameObject PlayerPrefab;
-        public GameObject coinPrefab;
+        [SerializeField] private GameObject _playerPrefab;
+        [SerializeField] private GameObject _coinPrefab;
+        
         private GameObject _player;
 
-        public int _currentLevel;
         public int target;
-        public float timeRemaining = 60f;
-        public float spawnRadius = 50f;
         
-        public int collectedCoins = 0;
-        public bool timerIsRunning;
+        private int _currentLevel;
+        private int _collectedCoins;
+        private bool _timerIsRunning;
+        private float _timeRemaining;
+        private float _spawnRadius;
 
         public LayerMask groundLayer;
-        public LayerMask obstacleLayer;
         
-        public int maxAttempts = 100;
+        private int _maxAttempts = 100;
+        private Vector3 _playerSpawnPosition = new(0f,150f,0f);
 
         public static event Action<int> OnCoinCollected;
         public static event Action<int> OnLevelChanged;
         public static event Action<float> OnTimeUpdated;
-        public static event Action OnGameLoose;
-        public static event Action OnGameWin;
+        public static event Action OnLevelLose;
+        public static event Action OnLevelWin;
+        public static event Action OnPlayerCollectedCoin;
 
-        
         private void Awake()
         {
             if (instance == null)
             {
                 instance = this;
-
             }
             else
             {
@@ -50,59 +51,64 @@ namespace Managers
         
         public void StartLevel(Level level)
         {
-            _currentLevel = level.ID;
-            collectedCoins = 0;
             if (_player)
             {
                 Destroy(_player);
             }
+            _collectedCoins = 0;
 
-            DistributeCoins(level.CoinsAmount,level.SpreadRadius);
-            timeRemaining = level.Time;
+            _currentLevel = level.ID;
             target = level.Target;
-            
-            OnCoinCollected?.Invoke(collectedCoins);
-            OnTimeUpdated?.Invoke(timeRemaining);
+            _spawnRadius = level.SpreadRadius;
+            _timeRemaining = level.Time;
+
+            OnCoinCollected?.Invoke(_collectedCoins);
+            OnTimeUpdated?.Invoke(_timeRemaining);
             OnLevelChanged?.Invoke(_currentLevel);
             
-            _player = Instantiate(PlayerPrefab);
-            _player.transform.position = new Vector3(0.0f,150f,0.0f);
-            _player.GetComponent<ParachuteController>().enabled = true;
-            _player.GetComponent<ParachuteController>().DeployParachute();
+            DistributeCoins(target);
+            DeployPlayer();
+            StartLevelTimer();
+            GameManager.instance.ChangeState(GameManager.GameState.Playing);
         }
         
-        public void StartTimer()
+        private void DeployPlayer()
         {
-            if(timerIsRunning) return;
+            _player = Instantiate(_playerPrefab,_playerSpawnPosition,Quaternion.identity);
+        }
+
+        private void StartLevelTimer()
+        {
+            if(_timerIsRunning) return;
             
-            timerIsRunning = true;
+            _timerIsRunning = true;
         }
 
         private void Update()
         {
-            if (!timerIsRunning) return;
+            if (!_timerIsRunning) return;
             
-            if (timeRemaining > 0)
+            if (_timeRemaining > 0)
             {
-                timeRemaining -= Time.deltaTime;
-                OnTimeUpdated?.Invoke(timeRemaining);
+                _timeRemaining -= Time.deltaTime;
+                OnTimeUpdated?.Invoke(_timeRemaining);
             }
             else
             {
-                timerIsRunning = false;
-                OnGameLoose?.Invoke();
-                PauseManager.instance.Pause();
-                timeRemaining = 0;
+                _timerIsRunning = false;
+                OnLevelLose?.Invoke();
+                _timeRemaining = 0;
+                GameManager.instance.ChangeState(GameManager.GameState.GameOver);
             }
         }
 
         public void CollectCoin()
         {
-            if (!timerIsRunning) return;
+            if (!_timerIsRunning) return;
 
-            collectedCoins++;
-            OnCoinCollected?.Invoke(collectedCoins);
-            if (collectedCoins >= target)
+            _collectedCoins++;
+            OnCoinCollected?.Invoke(_collectedCoins);
+            if (_collectedCoins >= target)
             {
                 LevelCompleted();
             }
@@ -110,28 +116,33 @@ namespace Managers
 
         private void LevelCompleted()
         {
-            timerIsRunning = false;
+            _timerIsRunning = false;
             if (_currentLevel >= GameManager.instance.GetAvailableLevels)
             {
-                OnGameWin?.Invoke();
-                GameManager.instance.SwitchScene("MainScene",1);
+                WinGame();
                 return;
             }
             
-            _currentLevel++;
             StartCoroutine(OnLevelCompleted());
+        }
+
+        private static void WinGame()
+        {
+            OnLevelWin?.Invoke();
+            GameManager.instance.ChangeState(GameManager.GameState.Start);
+            GameManager.instance.SwitchScene(Scenes.MenuScene);
         }
 
         private IEnumerator OnLevelCompleted()
         {
-            OnGameWin?.Invoke();
+            _currentLevel++;
+            OnLevelWin?.Invoke();
             yield return new WaitForSecondsRealtime (2);
-            GameManager.instance.SwitchScene("Game",_currentLevel);
+            GameManager.instance.SwitchScene(Scenes.GameLevel,_currentLevel);
         }
 
-        private void DistributeCoins(int amount, int radius)
+        private void DistributeCoins(int amount)
         {
-            spawnRadius = radius;
             var parent = new GameObject("Coins")
             {
                 transform =
@@ -147,7 +158,7 @@ namespace Managers
                 var spawnPosition = GetValidSpawnPosition(terrain);
                 if (spawnPosition == Vector3.zero) continue;
             
-                var coin = CoinFactory.CreateCoin(coinPrefab, parent.transform);
+                var coin = CoinFactory.CreateCoin(_coinPrefab, parent.transform);
                 coin.transform.position = spawnPosition;
                 coin.SetActive(true);
             }
@@ -155,12 +166,12 @@ namespace Managers
 
         private Vector3 GetValidSpawnPosition(Terrain terrain)
         {
-            for (int i = 0; i < maxAttempts; i++)
+            for (int i = 0; i < _maxAttempts; i++)
             {
                 var randomPosition = new Vector3(
-                    Random.Range(-spawnRadius, spawnRadius),
+                    Random.Range(-_spawnRadius, _spawnRadius),
                     0,
-                    Random.Range(-spawnRadius, spawnRadius)
+                    Random.Range(-_spawnRadius, _spawnRadius)
                 );
 
                 randomPosition.y = terrain.SampleHeight(randomPosition) + terrain.GetPosition().y + randomPosition.y + 1f;

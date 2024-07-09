@@ -44,4 +44,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7e299ff1c01027428cce26444e0cbe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProgressBarControllerPrefab: {fileID: 0}

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,10 @@ namespace Controllers
     public class UserController : MonoBehaviour
     {
         private LocomotionController _character;
+        private ParachuteController _parachuteController;
+        private UserCameraController _userCameraController;
+        private bool _isParachuting;
+
         private Transform _camera;
         private Vector3 _cameraForward;
         private Vector2 _look;
@@ -21,6 +26,8 @@ namespace Controllers
         {
             _camera = Camera.main.transform;
             _character = GetComponent<LocomotionController>();
+            _parachuteController = GetComponent<ParachuteController>();
+            _userCameraController = GetComponent<UserCameraController>();
         }
 
         private void Update()
@@ -29,7 +36,29 @@ namespace Controllers
             {
                 _jump = Input.GetButtonDown("Jump");
             }
+            CameraOrientation();
+            
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                if (!_isParachuting)
+                {
+                    _isParachuting = _parachuteController.TryDeployParachute();
+                }
+                else
+                {
+                    _parachuteController.CloseParachute();
+                    _isParachuting = false;
+                }
+            }
 
+            if (_isParachuting)
+            {
+                _parachuteController.HandleInput(_move);
+            }
+        }
+
+        private void CameraOrientation()
+        {
             FollowTransform.transform.rotation *= Quaternion.AngleAxis(_look.x * _rotationPower, Vector3.up);
             FollowTransform.transform.rotation *= Quaternion.AngleAxis(_look.y * _rotationPower, Vector3.right);
 
@@ -50,9 +79,18 @@ namespace Controllers
             FollowTransform.transform.localEulerAngles = angles;
             transform.rotation = Quaternion.Euler(0, FollowTransform.transform.rotation.eulerAngles.y, 0);
             FollowTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
+
         }
 
         private void FixedUpdate()
+        {
+            if(!_isParachuting)
+            {
+                Movement();
+            }
+        }
+
+        private void Movement()
         {
             var crouch = Input.GetKey(KeyCode.C);
             _cameraForward = Vector3.Scale(_camera.forward, new Vector3(1, 0, 1)).normalized;

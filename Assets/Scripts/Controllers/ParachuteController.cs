@@ -1,20 +1,16 @@
-using System;
-using Managers;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Controllers
 {
     public class ParachuteController : MonoBehaviour
     {
-        public GameObject parachutePrefab;
-        public float descentSpeed = 10.0f;
-        public float horizontalSpeed = 20.0f;
-        public float deployVelocity = 5.0f;
+        [SerializeField] private GameObject _parachuteModel;
+        [SerializeField] private float descentSpeed = 10.0f;
+        [SerializeField] private float horizontalSpeed = 20.0f;
+        [SerializeField] private float deployVelocity = 3f;
 
-        private bool isParachuteDeployed = false;
-        private GameObject parachuteInstance;
         private Rigidbody rb;
+        private bool isParachuteDeployed;
 
         private void Awake()
         {
@@ -25,8 +21,23 @@ namespace Controllers
         {
             CloseParachute();
         }
+        
+        /*private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                if (!isParachuteDeployed && rb.velocity.magnitude > deployVelocity)
+                {
+                    DeployParachute();
+                }
+                else
+                {
+                    CloseParachute();
+                }
+            }
+        }*/
 
-        private void Update()
+        /*private void Update()
         {
             if (Input.GetKeyUp(KeyCode.Space))
             {
@@ -40,28 +51,40 @@ namespace Controllers
                 }
             }
 
+            //mabye merge or work with gengeral input
             if (isParachuteDeployed)
             {
                 ControlDescent();
             }
+        }*/
+        
+        public void HandleInput(Vector2 movement)
+        {
+            Debug.Log("asdasd");
+            //mabye merge or work with gengeral input
+            if (isParachuteDeployed)
+            {
+                ControlDescent(movement);
+            }
         }
 
+        //get referemce tp parachu target and create once
         public void DeployParachute()
         {
-            CameraController.instance.ChangeCamera(2);
             isParachuteDeployed = true;
-            rb.velocity = Vector3.zero;
-            var target = GameObject.Find("ParachuteTarget");
-            parachuteInstance = Instantiate(parachutePrefab, target.transform.position, Quaternion.identity);
-            parachuteInstance.transform.SetParent(target.transform);
+            //rb.velocity = Vector3.zero;
+            _parachuteModel.SetActive(true);
             rb.drag = 15.0f;
         }
 
-        private void ControlDescent()
+        //Cjamge input 
+        private void ControlDescent(Vector2 move)
         {
             rb.velocity = new Vector3(rb.velocity.x, -descentSpeed, rb.velocity.z);
-            var moveHorizontal = Input.GetAxis("Horizontal");
-            var moveVertical = Input.GetAxis("Vertical");
+            
+            var moveHorizontal = move.x;
+            var moveVertical = move.y;
+            
             var moveDirection = (transform.forward * moveVertical + transform.right * moveHorizontal).normalized;
             var movement = moveDirection * horizontalSpeed;
             rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
@@ -69,22 +92,35 @@ namespace Controllers
 
         private void OnCollisionEnter(Collision collision)
         {
-            LevelManager.instance.StartTimer();
             if (isParachuteDeployed)
             {
                 CloseParachute();
             }
+        }
+        
+        public bool TryDeployParachute()
+        {
+            if (!isParachuteDeployed && rb.velocity.magnitude > deployVelocity)
+            {
+                DeployParachute();
+                return true;
+            }
+            return false;
 
-            this.enabled = false;
+            
+            /*if (isParachuteDeployed) return true;
+            if (!Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out var hitInfo)) return false;
+            if (!(hitInfo.distance > 5)) return false;
+            if(!(rb.velocity.magnitude > deployVelocity)) return false;
+            DeployParachute();
+            return true;*/
         }
 
-        private void CloseParachute()
+        public void CloseParachute()
         {
-            CameraController.instance.ChangeCamera(0);
-            
             isParachuteDeployed = false;
             rb.drag = 0.0f;
-            Destroy(parachuteInstance);
+            _parachuteModel.SetActive(false);
         }
     }
 }

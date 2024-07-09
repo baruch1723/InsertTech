@@ -44,19 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66cb1bddf2696154e89bb76a52036776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 149790, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
-  _currentLevel: 0
+  _playerPrefab: {fileID: 149790, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
+  _coinPrefab: {fileID: 8907261760504154769, guid: 80e7500e3896d8049957a9746aaefc3e, type: 3}
   target: 0
-  timeRemaining: 0
-  collectedCoins: 0
-  timerIsRunning: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  spawnRadius: 50
-  maxAttempts: 100
-  terrain: {fileID: 0}
-  coinPrefab: {fileID: 8907261760504154769, guid: 80e7500e3896d8049957a9746aaefc3e, type: 3}
