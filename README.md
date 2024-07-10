@@ -1,3 +1,4 @@
+![Diagram](https://github.com/baruch1723/InsertTech/assets/29302311/4f3887c8-0b31-453d-969b-fc2b70600c5a)
 <h1>Components</h1>
 
 **Level Manager**
