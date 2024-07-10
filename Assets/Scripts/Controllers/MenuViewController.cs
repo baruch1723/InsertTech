@@ -1,8 +1,9 @@
 using Constants;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Managers
+namespace Controllers
 {
     public class MenuViewController : MonoBehaviour
     {

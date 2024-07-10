@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class CoinFactory
+namespace Factory
 {
-    public static GameObject CreateCoin(GameObject coinPrefab, Transform parent)
+    public class CoinFactory
     {
-        return GameObject.Instantiate(coinPrefab,parent);
+        public static GameObject CreateCoin(GameObject coinPrefab, Transform parent)
+        {
+            return GameObject.Instantiate(coinPrefab,parent);
+        }
     }
 }

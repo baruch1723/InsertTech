@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,8 +7,6 @@ namespace Controllers
     {
         private LocomotionController _character;
         private ParachuteController _parachuteController;
-        private UserCameraController _userCameraController;
-        //private bool _isParachuting;
 
         private Transform _camera;
         private Vector3 _cameraForward;
@@ -27,7 +24,6 @@ namespace Controllers
             _camera = Camera.main.transform;
             _character = GetComponent<LocomotionController>();
             _parachuteController = GetComponent<ParachuteController>();
-            _userCameraController = GetComponent<UserCameraController>();
         }
 
         private void Update()

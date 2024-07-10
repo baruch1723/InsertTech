@@ -21,63 +21,22 @@ namespace Controllers
         {
             CloseParachute();
         }
-        
-        /*private void Update()
-        {
-            if (Input.GetKeyUp(KeyCode.Space))
-            {
-                if (!isParachuteDeployed && rb.velocity.magnitude > deployVelocity)
-                {
-                    DeployParachute();
-                }
-                else
-                {
-                    CloseParachute();
-                }
-            }
-        }*/
 
-        /*private void Update()
-        {
-            if (Input.GetKeyUp(KeyCode.Space))
-            {
-                if (!isParachuteDeployed && rb.velocity.magnitude > deployVelocity)
-                {
-                    DeployParachute();
-                }
-                else
-                {
-                    CloseParachute();
-                }
-            }
-
-            //mabye merge or work with gengeral input
-            if (isParachuteDeployed)
-            {
-                ControlDescent();
-            }
-        }*/
-        
         public void HandleInput(Vector2 movement)
         {
-            Debug.Log("asdasd");
-            //mabye merge or work with gengeral input
             if (isParachuteDeployed)
             {
                 ControlDescent(movement);
             }
         }
 
-        //get referemce tp parachu target and create once
-        public void DeployParachute()
+        private void DeployParachute()
         {
             isParachuteDeployed = true;
-            //rb.velocity = Vector3.zero;
             _parachuteModel.SetActive(true);
             rb.drag = 15.0f;
         }
 
-        //Cjamge input 
         private void ControlDescent(Vector2 move)
         {
             rb.velocity = new Vector3(rb.velocity.x, -descentSpeed, rb.velocity.z);

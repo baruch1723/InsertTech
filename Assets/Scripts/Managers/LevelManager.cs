@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Constants;
 using Controllers;
+using Factory;
 using Models;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -110,55 +111,6 @@ namespace Managers
             }
         }
 
-        /*private void LevelOver()
-        {
-            _timerIsRunning = false;
-            OnLevelLose?.Invoke();
-            _timeRemaining = 0;
-            GameManager.Instance.ChangeState(GameManager.GameState.GameOver);
-        }
-
-        public void CollectCoin()
-        {
-            if (!_timerIsRunning) return;
-
-            _collectedCoins++;
-            OnCoinCollected?.Invoke(_collectedCoins);
-            if (_collectedCoins >= goal)
-            {
-                LevelCompleted();
-            }
-        }
-
-        private void LevelCompleted()
-        {
-            _timerIsRunning = false;
-            if (_currentLevel >= GameManager.Instance.AvailableLevels)
-            {
-                WinGame();
-                return;
-            }
-            
-            StartCoroutine(OnLevelCompleted());
-        }
-
-        private void WinGame()
-        {
-            OnLevelWin?.Invoke();
-            CoinCollector.OnCollectCoin -= CollectCoin;
-            GameManager.Instance.ChangeState(GameManager.GameState.Start);
-            GameManager.Instance.SwitchScene(Scenes.MenuScene);
-        }
-
-        private IEnumerator OnLevelCompleted()
-        {
-            _currentLevel++;
-            CoinCollector.OnCollectCoin -= CollectCoin;
-            OnLevelWin?.Invoke();
-            yield return new WaitForSecondsRealtime (2);
-            GameManager.Instance.SwitchScene(Scenes.GameLevel,_currentLevel);
-        }*/
-        
         private void EndLevel(bool won)
         {
             _timerIsRunning = false;
