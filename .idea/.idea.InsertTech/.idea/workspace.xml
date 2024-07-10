@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="9c4dd6f9-4060-4702-8034-e63b4f2fd571" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InsertTech/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InsertTech/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/LevelViewController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controllers/LevelViewController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/MenuViewCanvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/MenuViewCanvas.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/LevelParams.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/LevelParams.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Menu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Menu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/MenuViewController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controllers/MenuViewController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +123,7 @@
       <workItem from="1720351932732" duration="31205000" />
       <workItem from="1720406740234" duration="55743000" />
       <workItem from="1720514716706" duration="26404000" />
-      <workItem from="1720601321983" duration="8340000" />
+      <workItem from="1720601321983" duration="9176000" />
     </task>
     <servers />
   </component>

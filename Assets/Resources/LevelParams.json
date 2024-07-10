@@ -4,14 +4,14 @@
             "Index": 1,
             "SpreadRadius": 200,
             "Time": 60,
-            "Goal": 1,
+            "Goal": 15,
             "TotalAmount": 200
         },
         {
             "Index": 2,
             "SpreadRadius": 300,
             "Time": 90,
-            "Goal": 2,
+            "Goal": 50,
             "TotalAmount": 100
         }
     ]
