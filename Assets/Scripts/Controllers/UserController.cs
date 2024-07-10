@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,6 +29,8 @@ namespace Controllers
 
         private void Update()
         {
+            if (GameManager.Instance.CurrentState != GameManager.GameState.Playing) return;
+
             if (!_jump)
             {
                 _jump = Input.GetButtonDown("Jump");

@@ -1,4 +1,5 @@
 using Cinemachine;
+using Managers;
 using UnityEngine;
 
 namespace Controllers
@@ -16,6 +17,8 @@ namespace Controllers
 
         private void Update()
         {
+            if (GameManager.Instance.CurrentState != GameManager.GameState.Playing) return;
+
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 ChangeCamera();

@@ -39,7 +39,7 @@ namespace Controllers
 
         private void UpdateCoinCount(int coins)
         {
-            _coinText.text = "Coins: " + coins + "/" + LevelManager.instance._goal;
+            _coinText.text = "Coins: " + coins + "/" + LevelManager.Instance.LevelGoal;
         }
 
         private void OnLevelChanged(int level)

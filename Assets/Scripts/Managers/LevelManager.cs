@@ -5,22 +5,19 @@ using Controllers;
 using Factory;
 using Models;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Managers
 {
     public class LevelManager : MonoBehaviour
     {
-        public static LevelManager instance;
+        public static LevelManager Instance;
 
         [SerializeField] private GameObject _playerPrefab;
         [SerializeField] private GameObject _coinPrefab;
 
         private GameObject _player;
 
-        
-        public int _goal;
         private int _currentLevel;
         private int _collectedCoins;
         private bool _timerIsRunning;
@@ -28,6 +25,8 @@ namespace Managers
         private float _spawnRadius;
 
         private readonly Vector3 _playerSpawnPosition = new(0f,250f,0f);
+
+        public int LevelGoal { get; private set; }
 
         public LayerMask GroundLayer;
         public static event Action<int> OnCoinCollected;
@@ -38,9 +37,9 @@ namespace Managers
 
         private void Awake()
         {
-            if (instance == null)
+            if (Instance == null)
             {
-                instance = this;
+                Instance = this;
             }
             else
             {
@@ -53,7 +52,7 @@ namespace Managers
             ResetLevelState();
 
             _currentLevel = level.Index;
-            _goal = level.Goal;
+            LevelGoal = level.Goal;
             _spawnRadius = level.SpreadRadius;
             _timeRemaining = level.Time;
 
@@ -144,7 +143,7 @@ namespace Managers
             _collectedCoins++;
             OnCoinCollected?.Invoke(_collectedCoins);
 
-            if (_collectedCoins >= _goal)
+            if (_collectedCoins >= LevelGoal)
             {
                 EndLevel(true);
             }

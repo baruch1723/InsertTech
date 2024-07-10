@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Linq;
 using Constants;
@@ -16,11 +15,10 @@ namespace Managers
         {
             Start,
             Playing,
-            Paused,
             GameOver
         }
 
-        private GameState CurrentState { get; set; }
+        public GameState CurrentState { get; set; }
 
         private LevelsWrapper _loadedLevels;
         private int _availableLevels;
@@ -56,14 +54,11 @@ namespace Managers
         }
 
         public static int GetCurrentLevel() => PlayerPrefs.GetInt(CurrentLevelKey, 1);
-
-
+        
         private static void SaveCurrentLevel(int level) => PlayerPrefs.SetInt(CurrentLevelKey, level);
 
-
         public void ChangeState(GameState newState) => CurrentState = newState;
-
-
+        
         public void SwitchScene(string scene, int level = 1)
         {
             StartCoroutine(LoadScene(scene, level));
@@ -75,14 +70,13 @@ namespace Managers
             if (level != null)
             {
                 SaveCurrentLevel(levelNumber);
-                LevelManager.instance.StartLevel(level);
+                LevelManager.Instance.StartLevel(level);
             }
             else
             {
                 Debug.LogError($"Level {levelNumber} not found");
             }
         }
-
 
         private IEnumerator LoadScene(string scene, int level)
         {
@@ -100,8 +94,7 @@ namespace Managers
         }
 
         public void RestartLevel() => SwitchScene(Scenes.GameLevel, GetCurrentLevel());
-
-
+        
         private static LevelsWrapper LoadLevelsFromJson()
         {
             var jsonFile = Resources.Load<TextAsset>("LevelParams");
