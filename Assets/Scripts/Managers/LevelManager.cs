@@ -4,6 +4,7 @@ using Constants;
 using Controllers;
 using Models;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Managers
@@ -14,28 +15,25 @@ namespace Managers
 
         [SerializeField] private GameObject _playerPrefab;
         [SerializeField] private GameObject _coinPrefab;
-        
+
         private GameObject _player;
 
-        public int target;
         
+        public int _goal;
         private int _currentLevel;
         private int _collectedCoins;
         private bool _timerIsRunning;
         private float _timeRemaining;
         private float _spawnRadius;
 
-        public LayerMask groundLayer;
-        
-        private int _maxAttempts = 100;
-        private Vector3 _playerSpawnPosition = new(0f,150f,0f);
+        private readonly Vector3 _playerSpawnPosition = new(0f,250f,0f);
 
+        public LayerMask GroundLayer;
         public static event Action<int> OnCoinCollected;
         public static event Action<int> OnLevelChanged;
         public static event Action<float> OnTimeUpdated;
         public static event Action OnLevelLose;
         public static event Action OnLevelWin;
-        public static event Action OnPlayerCollectedCoin;
 
         private void Awake()
         {
@@ -51,25 +49,38 @@ namespace Managers
         
         public void StartLevel(Level level)
         {
-            if (_player)
-            {
-                Destroy(_player);
-            }
-            _collectedCoins = 0;
+            ResetLevelState();
 
-            _currentLevel = level.ID;
-            target = level.Target;
+            _currentLevel = level.Index;
+            _goal = level.Goal;
             _spawnRadius = level.SpreadRadius;
             _timeRemaining = level.Time;
 
+            NotifyLevelStart();
+
+            DistributeCoins(_goal);
+            DeployPlayer();
+            CoinCollector.OnCollectCoin += CollectCoin;
+            StartLevelTimer();
+            GameManager.Instance.ChangeState(GameManager.GameState.Playing);
+        }
+
+        private void ResetLevelState()
+        {
+            if (_player != null)
+            {
+                Destroy(_player);
+            }
+
+            _collectedCoins = 0;
+            _timerIsRunning = false;
+        }
+
+        private void NotifyLevelStart()
+        {
             OnCoinCollected?.Invoke(_collectedCoins);
             OnTimeUpdated?.Invoke(_timeRemaining);
             OnLevelChanged?.Invoke(_currentLevel);
-            
-            DistributeCoins(target);
-            DeployPlayer();
-            StartLevelTimer();
-            GameManager.instance.ChangeState(GameManager.GameState.Playing);
         }
         
         private void DeployPlayer()
@@ -95,11 +106,16 @@ namespace Managers
             }
             else
             {
-                _timerIsRunning = false;
-                OnLevelLose?.Invoke();
-                _timeRemaining = 0;
-                GameManager.instance.ChangeState(GameManager.GameState.GameOver);
+                EndLevel(false);
             }
+        }
+
+        /*private void LevelOver()
+        {
+            _timerIsRunning = false;
+            OnLevelLose?.Invoke();
+            _timeRemaining = 0;
+            GameManager.Instance.ChangeState(GameManager.GameState.GameOver);
         }
 
         public void CollectCoin()
@@ -108,7 +124,7 @@ namespace Managers
 
             _collectedCoins++;
             OnCoinCollected?.Invoke(_collectedCoins);
-            if (_collectedCoins >= target)
+            if (_collectedCoins >= goal)
             {
                 LevelCompleted();
             }
@@ -117,7 +133,7 @@ namespace Managers
         private void LevelCompleted()
         {
             _timerIsRunning = false;
-            if (_currentLevel >= GameManager.instance.GetAvailableLevels)
+            if (_currentLevel >= GameManager.Instance.AvailableLevels)
             {
                 WinGame();
                 return;
@@ -126,19 +142,67 @@ namespace Managers
             StartCoroutine(OnLevelCompleted());
         }
 
-        private static void WinGame()
+        private void WinGame()
         {
             OnLevelWin?.Invoke();
-            GameManager.instance.ChangeState(GameManager.GameState.Start);
-            GameManager.instance.SwitchScene(Scenes.MenuScene);
+            CoinCollector.OnCollectCoin -= CollectCoin;
+            GameManager.Instance.ChangeState(GameManager.GameState.Start);
+            GameManager.Instance.SwitchScene(Scenes.MenuScene);
         }
 
         private IEnumerator OnLevelCompleted()
         {
             _currentLevel++;
+            CoinCollector.OnCollectCoin -= CollectCoin;
             OnLevelWin?.Invoke();
             yield return new WaitForSecondsRealtime (2);
-            GameManager.instance.SwitchScene(Scenes.GameLevel,_currentLevel);
+            GameManager.Instance.SwitchScene(Scenes.GameLevel,_currentLevel);
+        }*/
+        
+        private void EndLevel(bool won)
+        {
+            _timerIsRunning = false;
+            _timeRemaining = 0;
+            CoinCollector.OnCollectCoin -= CollectCoin;
+
+            if (won)
+            {
+                OnLevelWin?.Invoke();
+                if (_currentLevel >= GameManager.Instance.AvailableLevels)
+                {
+                    GameManager.Instance.SwitchScene(Scenes.MenuScene);
+                }
+                else
+                {
+                    StartCoroutine(ProceedToNextLevel());
+                }
+            }
+            else
+            {
+                OnLevelLose?.Invoke();
+                GameManager.Instance.ChangeState(GameManager.GameState.GameOver);
+                GameManager.Instance.SwitchScene(Scenes.GameLevel);
+            }
+        }
+
+        private void CollectCoin()
+        {
+            if (!_timerIsRunning) return;
+
+            _collectedCoins++;
+            OnCoinCollected?.Invoke(_collectedCoins);
+
+            if (_collectedCoins >= _goal)
+            {
+                EndLevel(true);
+            }
+        }
+
+        private IEnumerator ProceedToNextLevel()
+        {
+            _currentLevel++;
+            yield return new WaitForSecondsRealtime(2);
+            GameManager.Instance.SwitchScene(Scenes.GameLevel, _currentLevel);
         }
 
         private void DistributeCoins(int amount)
@@ -166,7 +230,8 @@ namespace Managers
 
         private Vector3 GetValidSpawnPosition(Terrain terrain)
         {
-            for (int i = 0; i < _maxAttempts; i++)
+            int maxAttempts = 100;
+            for (int i = 0; i < maxAttempts; i++)
             {
                 var randomPosition = new Vector3(
                     Random.Range(-_spawnRadius, _spawnRadius),
@@ -187,7 +252,7 @@ namespace Managers
 
         private bool IsValidPosition(Vector3 position)
         {
-            if (!Physics.Raycast(position + Vector3.up * 50, Vector3.down, Mathf.Infinity, groundLayer))
+            if (!Physics.Raycast(position + Vector3.up * 50, Vector3.down, Mathf.Infinity, GroundLayer))
             {
                 return false;
             }

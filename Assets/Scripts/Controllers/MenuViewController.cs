@@ -26,12 +26,12 @@ namespace Managers
 
         private static void OnStartGame()
         {
-            GameManager.instance.SwitchScene(Scenes.GameLevel, 1);
+            GameManager.Instance.SwitchScene(Scenes.GameLevel, 1);
         }
 
         private static void OnContinueGame()
         {
-            GameManager.instance.SwitchScene(Scenes.MenuScene, GameManager.GetCurrentLevel());
+            GameManager.Instance.SwitchScene(Scenes.GameLevel, GameManager.GetCurrentLevel());
         }
 
         private static void OnExitGame()

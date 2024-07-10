@@ -41,13 +41,13 @@ namespace Managers
         
         private static void OnRestartLevel()
         {
-            GameManager.instance.RestartLevel();
+            GameManager.Instance.RestartLevel();
         }
         
         private static void OnReturnToMainScene()
         {
-            GameManager.instance.ChangeState(GameManager.GameState.Start);
-            GameManager.instance.SwitchScene(Scenes.MenuScene);
+            GameManager.Instance.ChangeState(GameManager.GameState.Start);
+            GameManager.Instance.SwitchScene(Scenes.MenuScene);
         }
         
         private void Update()

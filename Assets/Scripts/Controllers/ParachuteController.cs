@@ -10,7 +10,7 @@ namespace Controllers
         [SerializeField] private float deployVelocity = 3f;
 
         private Rigidbody rb;
-        private bool isParachuteDeployed;
+        public bool isParachuteDeployed;
 
         private void Awake()
         {
@@ -100,20 +100,19 @@ namespace Controllers
         
         public bool TryDeployParachute()
         {
-            if (!isParachuteDeployed && rb.velocity.magnitude > deployVelocity)
-            {
-                DeployParachute();
-                return true;
-            }
-            return false;
-
+            var heightEnough = false; 
             
-            /*if (isParachuteDeployed) return true;
-            if (!Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out var hitInfo)) return false;
-            if (!(hitInfo.distance > 5)) return false;
-            if(!(rb.velocity.magnitude > deployVelocity)) return false;
+            if(Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out var hitInfo))
+            {
+                var distance = hitInfo.distance;
+                heightEnough = distance > 5;
+            }
+
+            if (isParachuteDeployed || !(rb.velocity.magnitude > deployVelocity) || !heightEnough) return false;
+            
             DeployParachute();
-            return true;*/
+            
+            return true;
         }
 
         public void CloseParachute()

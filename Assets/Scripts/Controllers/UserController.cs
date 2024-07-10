@@ -9,7 +9,7 @@ namespace Controllers
         private LocomotionController _character;
         private ParachuteController _parachuteController;
         private UserCameraController _userCameraController;
-        private bool _isParachuting;
+        //private bool _isParachuting;
 
         private Transform _camera;
         private Vector3 _cameraForward;
@@ -40,18 +40,18 @@ namespace Controllers
             
             if (Input.GetKeyUp(KeyCode.Space))
             {
-                if (!_isParachuting)
+                if (!_parachuteController.isParachuteDeployed)
                 {
-                    _isParachuting = _parachuteController.TryDeployParachute();
+                    _parachuteController.isParachuteDeployed = _parachuteController.TryDeployParachute();
                 }
                 else
                 {
                     _parachuteController.CloseParachute();
-                    _isParachuting = false;
+                    _parachuteController.isParachuteDeployed = false;
                 }
             }
 
-            if (_isParachuting)
+            if (_parachuteController.isParachuteDeployed)
             {
                 _parachuteController.HandleInput(_move);
             }
@@ -84,7 +84,7 @@ namespace Controllers
 
         private void FixedUpdate()
         {
-            if(!_isParachuting)
+            if(!_parachuteController.isParachuteDeployed)
             {
                 Movement();
             }

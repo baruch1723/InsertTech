@@ -3,11 +3,9 @@ namespace Models
     [System.Serializable]
     public class Level
     {
-        public int ID;
+        public int Index;
         public int Time;
-        public int Target;
+        public int Goal;
         public int SpreadRadius;
-        //public string Name;
-        //public int CoinsAmount;
     }
 }

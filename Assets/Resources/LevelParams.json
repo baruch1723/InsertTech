@@ -1,16 +1,16 @@
 {
     "Levels": [
         {
-            "ID": 1,
+            "Index": 1,
             "SpreadRadius": 20,
             "Time": 60,
-            "Target": 3
+            "Goal": 3
         },
         {
-            "ID": 2,
+            "Index": 2,
             "SpreadRadius": 30,
             "Time": 90,
-            "Target": 2
+            "Goal": 2
         }
     ]
 }
