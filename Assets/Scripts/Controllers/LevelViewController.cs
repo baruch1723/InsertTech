@@ -83,9 +83,10 @@ namespace Controllers
 
         private void ShowInstructions()
         {
-            if(PlayerPrefs.GetInt(InstructionsState,0) == 1) return;
-            PlayerPrefs.SetInt(InstructionsState, 1);
+            if (PlayerPrefs.GetInt(InstructionsState, 0) != 0) return;
+            
             StartCoroutine(PlayInstructions());
+            PlayerPrefs.SetInt(InstructionsState, 1);
         }
     }
 }
