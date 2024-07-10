@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using Constants;
@@ -115,5 +116,15 @@ namespace Managers
             Debug.LogError("JSON file not found in Resources");
             return null;
         }
+
+#if UNITY_EDITOR
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                PlayerPrefs.DeleteAll();
+            }
+        }
+#endif
     }
 }

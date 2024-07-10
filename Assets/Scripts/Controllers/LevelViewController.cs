@@ -1,3 +1,4 @@
+using System.Collections;
 using Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,21 +13,24 @@ namespace Controllers
         
         [SerializeField] private GameObject _winPanel;
         [SerializeField] private GameObject _losePanel;
+        [SerializeField] private GameObject _instructionsPanel;
 
-        void OnEnable()
+        private string InstructionsState = "Instructions";
+        
+        private void OnEnable()
         {
             LevelManager.OnCoinCollected += UpdateCoinCount;
-            LevelManager.OnLevelChanged += UpdateLevelText;
+            LevelManager.OnLevelChanged += OnLevelChanged;
             LevelManager.OnTimeUpdated += UpdateTimer;
             
             LevelManager.OnLevelLose += OnLoseLevel;
             LevelManager.OnLevelWin += OnWinLevel;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             LevelManager.OnCoinCollected -= UpdateCoinCount;
-            LevelManager.OnLevelChanged -= UpdateLevelText;
+            LevelManager.OnLevelChanged -= OnLevelChanged;
             LevelManager.OnTimeUpdated -= UpdateTimer;
             
             LevelManager.OnLevelLose -= OnLoseLevel;
@@ -38,10 +42,10 @@ namespace Controllers
             _coinText.text = "Coins: " + coins + "/" + LevelManager.instance._goal;
         }
 
-        private void UpdateLevelText(int level)
+        private void OnLevelChanged(int level)
         {
+            OnStartLevel();
             _levelText.text = "Level: " + level;
-            //OnStartLevel();
         }
         
         private void UpdateTimer(float time)
@@ -58,15 +62,30 @@ namespace Controllers
         {
             _winPanel.SetActive(true);
         }
-
-        /*//TODO:need to triggred at level start
-        public void OnStartLevel()
+        
+        private void OnStartLevel()
         {
-            winText.SetActive(false);
-            loseText.SetActive(false);
-            
-            coinText.gameObject.SetActive(true);
-            timerText.gameObject.SetActive(true);
-        }*/
+            _winPanel.SetActive(false);
+            _losePanel.SetActive(false);
+
+            _coinText.gameObject.SetActive(true);
+            _timerText.gameObject.SetActive(true);
+            _levelText.gameObject.SetActive(true);
+            ShowInstructions();
+        }
+
+        private IEnumerator PlayInstructions()
+        {
+            _instructionsPanel.SetActive(true);
+            yield return new WaitForSecondsRealtime(3);
+            _instructionsPanel.SetActive(false);
+        }
+
+        private void ShowInstructions()
+        {
+            if(PlayerPrefs.GetInt(InstructionsState,0) == 1) return;
+            PlayerPrefs.SetInt(InstructionsState, 1);
+            StartCoroutine(PlayInstructions());
+        }
     }
 }

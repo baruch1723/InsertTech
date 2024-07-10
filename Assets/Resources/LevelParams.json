@@ -2,16 +2,16 @@
     "Levels": [
         {
             "Index": 1,
-            "SpreadRadius": 20,
+            "SpreadRadius": 200,
             "Time": 60,
-            "Goal": 15,
-            "TotalAmount": 100
+            "Goal": 1,
+            "TotalAmount": 200
         },
         {
             "Index": 2,
-            "SpreadRadius": 30,
+            "SpreadRadius": 300,
             "Time": 90,
-            "Goal": 50,
+            "Goal": 2,
             "TotalAmount": 100
         }
     ]

@@ -38,7 +38,7 @@ namespace Controllers
             {
                 if (!_parachuteController.isParachuteDeployed)
                 {
-                    _parachuteController.isParachuteDeployed = _parachuteController.TryDeployParachute();
+                     _parachuteController.isParachuteDeployed = _parachuteController.TryDeployParachute();
                 }
                 else
                 {

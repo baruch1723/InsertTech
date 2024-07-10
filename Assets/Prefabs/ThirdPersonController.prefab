@@ -1367,7 +1367,6 @@ GameObject:
   - component: {fileID: 128461188756882943}
   - component: {fileID: 2133458864503638766}
   - component: {fileID: 1615878721641563159}
-  - component: {fileID: 6650390257405029216}
   m_Layer: 0
   m_Name: ThirdPersonController
   m_TagString: Player
@@ -1545,6 +1544,7 @@ MonoBehaviour:
   descentSpeed: 5
   horizontalSpeed: 20
   deployVelocity: 5
+  isParachuteDeployed: 0
 --- !u!114 &1615878721641563159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1555,18 +1555,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3126e12b6ecf734dacbc05e24ca85dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6650390257405029216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae5acad101ad1194881b12c13ffa5cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &150244

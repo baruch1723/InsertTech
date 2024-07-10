@@ -3,15 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="9c4dd6f9-4060-4702-8034-e63b4f2fd571" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InsertTech/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InsertTech/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/LevelManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelManager.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/LevelViewCanvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelViewCanvas.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ThirdPersonController.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/ThirdPersonController.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/LevelParams.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/LevelParams.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/MenuViewController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controllers/MenuViewController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/ParachuteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controllers/ParachuteController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/Player.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/Player.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/SideMenuVC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controllers/SideMenuVC.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/LevelViewController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controllers/LevelViewController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controllers/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Factory/CoinFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Factory/CoinFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/LevelManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/LevelManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Models/Level.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Models/Level.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,10 +105,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="74672">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="74672" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -127,7 +128,7 @@
       <workItem from="1720351932732" duration="31205000" />
       <workItem from="1720406740234" duration="55743000" />
       <workItem from="1720514716706" duration="26404000" />
-      <workItem from="1720601321983" duration="441000" />
+      <workItem from="1720601321983" duration="6221000" />
     </task>
     <servers />
   </component>
@@ -143,30 +144,32 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Controllers/UserController.cs</url>
-          <line>40</line>
-          <properties documentPath="E:\InsertTech\Assets\Scripts\Controllers\UserController.cs" initialLine="42" containingFunctionPresentation="method 'Update'">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Controllers/LevelViewController.cs</url>
+          <line>85</line>
+          <properties documentPath="E:\InsertTech\Assets\Scripts\Controllers\LevelViewController.cs" initialLine="85" containingFunctionPresentation="method 'ShowInstructions'">
             <startOffsets>
-              <option value="1108" />
+              <option value="2507" />
+              <option value="2556" />
             </startOffsets>
             <endOffsets>
-              <option value="1193" />
+              <option value="2555" />
+              <option value="2563" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="15" />
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Controllers/UserController.cs</url>
-          <line>44</line>
-          <properties documentPath="E:\InsertTech\Assets\Scripts\Controllers\UserController.cs" initialLine="46" containingFunctionPresentation="method 'Update'">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Controllers/LevelViewController.cs</url>
+          <line>86</line>
+          <properties documentPath="E:\InsertTech\Assets\Scripts\Controllers\LevelViewController.cs" initialLine="86" containingFunctionPresentation="method 'ShowInstructions'">
             <startOffsets>
-              <option value="1271" />
+              <option value="2576" />
             </startOffsets>
             <endOffsets>
-              <option value="1309" />
+              <option value="2617" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="16" />
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

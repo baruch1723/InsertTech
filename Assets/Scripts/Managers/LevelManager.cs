@@ -59,7 +59,7 @@ namespace Managers
 
             NotifyLevelStart();
 
-            DistributeCoins(_goal);
+            DistributeCoins(level.TotalAmount);
             DeployPlayer();
             CoinCollector.OnCollectCoin += CollectCoin;
             StartLevelTimer();

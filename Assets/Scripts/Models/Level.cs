@@ -7,5 +7,6 @@ namespace Models
         public int Time;
         public int Goal;
         public int SpreadRadius;
+        public int TotalAmount;
     }
 }

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 149790, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
   _coinPrefab: {fileID: 8907261760504154769, guid: 80e7500e3896d8049957a9746aaefc3e, type: 3}
-  target: 0
-  groundLayer:
+  _goal: 0
+  GroundLayer:
     serializedVersion: 2
     m_Bits: 64
